@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Current Bitcoin Price</title>
+
+    <style>
+        span{
+            color: rgb(76, 172, 76);
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <h1>Current Bitcoin Price is <span id="price"></span></h1>
+        <p id="updateDate"></p>
+    </div>
+    <button>Refresh Data</button>
+    
+</body>
+<script>
+    var btn = document.querySelector("button");
+    var price = document.querySelector("#price");
+    var updateDate = document.querySelector("#updateDate");
+    
+
+    btn.addEventListener("click", function(){
+        var XHR = new XMLHttpRequest();
+        XHR.onreadystatechange = function(){
+            if(XHR.readyState == 4 && XHR.status == 200){
+                var data = JSON.parse(XHR.responseText).bpi.USD.rate;
+                var update = JSON.parse(XHR.responseText).time.updated;
+                price.innerHTML = data + "USD";
+                updateDate.innerHTML = "Lase Update: " + update;
+
+            }
+        };
+
+        XHR.open("GET", "https://api.coindesk.com/v1/bpi/currentprice.json");
+        XHR.send();
+    })
+
+</script>
+</html>
